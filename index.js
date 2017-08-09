@@ -97,5 +97,5 @@ module.exports = function({ source , filePath, babylonPlugins = DEFAULT_BABYLON_
 		}
 		return true;
 	});
-	return recast.print(ast).code;
+	return { source: recast.print(ast).code, queriesWritten: newImports };
 };
