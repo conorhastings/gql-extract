@@ -1,0 +1,23 @@
+{
+  "name": "gql-extract",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/socialtables/gql-extract.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/socialtables/gql-extract/issues"
+  },
+  "homepage": "https://github.com/socialtables/gql-extract#readme",
+  "dependencies": {
+    "mkdirp": "^0.5.1",
+    "recast": "^0.12.6"
+  }
+}
