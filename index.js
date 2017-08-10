@@ -2,12 +2,14 @@ const recast = require("recast");
 const fs = require("fs");
 const mkdirp = require("mkdirp");
 const nodePath = require("path");
+const uuid = require("uuid");
 
 function parser(options) {
 	return {
 		parse(code) {
 			return require("babylon").parse(code, {
-				sourceType: "module", plugins: options
+				sourceType: "module", 
+				plugins: options
 			});
 		}
 	};
@@ -27,7 +29,14 @@ module.exports = function({ source , filePath, babylonPlugins = DEFAULT_BABYLON_
 			if (tag === "gql") {
 				const literal = node.quasi.quasis[0].value.raw;
 				const splitLiteral = literal.split(" ");
-				const name = splitLiteral.find((_, index) => splitLiteral[index -1] === "query");
+				const nameStart = splitLiteral.find((_, index) => (
+					index !== 0 &&
+					(
+						splitLiteral[index -1].includes("query") ||
+						splitLiteral[index -1] .includes("mutation")
+					)
+				));
+				const name = nameStart ? nameStart.split("(")[0] : uuid.v4();
 				const queryFilePath = nodePath.join(filePath, `${name}.graphql`);
 				fs.writeFileSync(queryFilePath, literal, "utf8");
 				newImports.set(name, queryFilePath);
