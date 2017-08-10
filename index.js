@@ -19,7 +19,7 @@ module.exports = function({ source , filePath, babylonPlugins = DEFAULT_BABYLON_
 	const ast = recast.parse(source, { parser: parser(babylonPlugins) });
 	mkdirp.sync(nodePath.join(filePath));
 	const newImports = new Map();
-
+	const queriesWritten = new Map();
 	function extractQuery(node) {
 		const type = node && node.type;
 		if (type === "TaggedTemplateExpression") {
@@ -31,6 +31,7 @@ module.exports = function({ source , filePath, babylonPlugins = DEFAULT_BABYLON_
 				const queryFilePath = nodePath.join(filePath, `${name}.graphql`);
 				fs.writeFileSync(queryFilePath, literal, "utf8");
 				newImports.set(name, queryFilePath);
+				queriesWritten.set(name, literal);
 				return { name, queryFilePath };
 			}
 		}
@@ -97,5 +98,5 @@ module.exports = function({ source , filePath, babylonPlugins = DEFAULT_BABYLON_
 		}
 		return true;
 	});
-	return { source: recast.print(ast).code, queriesWritten: newImports };
+	return { source: recast.print(ast).code, queriesWritten: queriesWritten };
 };
